@@ -1,0 +1,47 @@
+version: '3.1'
+services:
+    flair_ign:
+        image: flair_ign:0.1
+        container_name: flair_ign
+        command: jupyter lab --ip=0.0.0.0 --port=8889 --allow-root --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/root --no-browser
+        volumes: 
+            - /home/ldejuan/flair-ign:/root
+            - /work/users/flair-ign/starting-kit/toy_dataset_flair-one:/toy_dataset_flair-one
+            - /work/users/flair-ign/starting-kit/toy_dataset_flair-one/metadata:/metadata
+            - /work/users/flair-ign/output:/outputdir
+            - /work/users/flair-ign:/data
+        ports:
+            - 8889:8889
+
+    flairdev:
+        image: flair_tiff2df:0.1
+        container_name: flairdev
+        volumes:
+            - /mnt/c/Users/ldejuan/work/aaDATA/home:/root
+#            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/inputdir:/inputdir
+#            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/outputdir:/outputdir
+#            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/outputdir:/inputdir
+#            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/combine:/outputdir
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/combine:/inputdir
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/training:/outputdir
+
+
+
+    
+    flair_tiff2df:
+        image: flair_tiff2df:0.1
+        container_name: flair_tiff2df
+        command: python3 /tiff2dataframe.py
+        volumes:
+            - /mnt/c/Users/ldejuan/work/aaDATA/home:/root
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/inputdir:/inputdir
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/outputdir:/outputdir 
+
+    flair_combine:
+        image: flair_tiff2df:0.1
+        container_name: flair_combine
+        command: python3 /combine.py
+        volumes:
+            - /mnt/c/Users/ldejuan/work/aaDATA/home:/root
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/outputdir:/inputdir
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/flair-ign/combine:/outputdir                                  
